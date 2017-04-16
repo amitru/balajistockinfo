@@ -1,10 +1,11 @@
 # balajistockinfo
-Web App Built in Nodejs, Express JS and Mongodb
+Web App Built in Webix, Nodejs, Express JS and Mongodb
 
 This Application is used to save stock information and support basic CRUD opertations.
 I built this application for my learning puropse. The main components of this application
 are built on :-
 
+Webix
 Bootstrap
 Nodejs
 Expressjs
