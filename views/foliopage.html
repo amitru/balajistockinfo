@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+</head>
+
+<body data-spy="scroll" data-target="#navbar" data-offset="150">
+
+    <nav class="navbar navbar-light bg-faded navbar-fixed-top" id="navbar">
+        <a class="navbar-brand" href="#">MyApp</a>
+        <ul class="nav navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#jumbotron">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#footer">Download The App</a>
+            </li>
+        </ul>
+
+        <form class="form-inline pull-xs-right">
+            <button class="btn btn-success" type="button" onclick="logoutMe();">Logout</button>
+        </form>
+    </nav>
+
+    <br><br><br><br>
+
+    <div align="center">
+
+        <form name="addRec" action="/addRecord" method="post">
+            <table>
+
+                <tr>
+                    <td>
+                        <span class="label label-info"><h6>Script Name:</h6></span>&nbsp;
+                    </td>
+                    <td><input type="text" class="form-control" name="scriptName"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="label label-info"> <h6>TYPE(NSE/BSE):</h6></span>&nbsp;
+                    </td>
+                    <td><input type="text" class="form-control" name="scriptType"></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="label label-info"><h6>Buy Date:</h6></span>&nbsp;
+                    </td>
+                    <td><input type="text" class="form-control" name="buyDate">
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span class="label label-info"><h6>Buy Price:</h6></span>&nbsp;
+                    </td>
+                    <td><input type="text" class="form-control" name="buyPrice"></td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td><input type="submit" class="btn btn-primary" name="submit" value="Add Record"></td>
+                    &nbsp;
+                    <td><input type="button" class="btn btn-primary" name="button" value="Delete Record" onclick="deleteRow()"></td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+
+            </table>
+
+        </form>
+
+    </div>
+
+    <div id="testD" align="center"></div>
+
+
+</body>
+
+
+
+<script>
+    var s = "{{stockData}}";
+    var movieRecordsJson = JSON.parse(s.replace(/&quot;/g, '"'));
+
+    function logoutMe() {
+        $.ajax({
+            type: "GET",
+            url: "/logoutMe",
+            async: false
+        });
+    }
+
+    function deleteRow() {
+
+        alert("Under Developement");
+
+        return;
+
+
+        console.debug(gridd);
+        var item = gridd.getSelectedItem();
+        console.debug(item.data0)
+
+        //onsuccess delete from grid too.
+        var jqxhr = $.post('deleteRecord', {
+            id: item.data0
+        });
+        window.location.replace("http://localhost:3000/");
+    }
+</script>
+
+
+<link rel="stylesheet" href="./public/webix/webix.css" type="text/css" charset="utf-8">
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
+
+
+<script src="./public/webix/webix.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript" charset="utf-8">
+    webix.ready(function() {
+
+        loadGrid();
+    });
+
+
+    function loadGrid() {
+
+        gridd = webix.ui({
+            container: "testD",
+            editable: true,
+            editaction: "dblclick",
+            view: "datatable",
+            select: "row",
+            columns: [{
+                id: "data1",
+                header: "Script Name",
+                width: 200
+            }, {
+                id: "data2",
+                header: "Type",
+                width: 80
+            }, {
+                id: "data3",
+                header: "Buy Date",
+                width: 100,
+                liveEdit: true,
+                editor: "text"
+            }, {
+                id: "data4",
+                header: "Buy Price",
+                width: 100,
+                liveEdit: true,
+                editor: "text"
+            }],
+            autoheight: true,
+            autowidth: true,
+            datatype: "jsarray",
+            data: movieRecordsJson,
+            on: {
+                onAfterEditStop: function(state, editor, ignoreUpdate) {
+                    console.log(state.old);
+                    console.log(state.value);
+                    console.log(gridd.getSelectedItem());
+                }
+            }
+
+        });
+    }
+</script>
